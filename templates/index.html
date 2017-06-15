@@ -51,14 +51,23 @@
 
         var coordInfoWindow = new google.maps.InfoWindow();
 
-        coordInfoWindow.setContent("<img src=" + imagePath + " alt='" + cityName + "' height='200' width='400' >"
-        + "<p><button onclick='voteDown(" + String(id) + ")'>Vote down</button>"
-        + "<button onclick='voteUp(" + String(id) + ")'>Vote up</button></p>"
-        + "<p id='number_votes_" + String(id) + "'>Number of votes: </p>");
+        var contentString = "<img src=" + imagePath + " alt='" + cityName + "' height='200' width='400' >"
+        + "<p><button id='btnVoteDown" + id +">Vote down</button>"
+        + "<button id='btnVoteUp" + id +"'>Vote up</button></p>"
+        + "<p id='votes" + String(id) + "'>Number of votes: </p>";
+
+        coordInfoWindow.setContent(contentString);
         coordInfoWindow.setPosition(place);
 
-        google.maps.event.addListener(marker, 'click', function() {
+        document.getElementById("btnVoteUp" + id).onclick = function() {
+          voteUp(id);
+        };
 
+        document.getElementById("btnVoteDown" + id).onclick = function() {
+          voteDown(id);
+        };
+
+        google.maps.event.addListener(marker, 'click', function() {
           coordInfoWindow.open(map);
         });
 
@@ -73,8 +82,8 @@
         socket.on('vote-up-finished', function(data){
           console.log(data);
           console.log("id", id);
-          document.getElementById("number_votes_" + String(id)).innerHTML = "<p>Number of votes: " + data.score + "</p>";
-
+          var element = document.getElementById('votes' + String(id));
+          element.innerHTML = "<p>Number of votes: " + data.score + "</p>";
         });
       }
 
@@ -86,7 +95,7 @@
         socket.on('vote-down-finished', function(data){
           console.log(data);
           console.log("id", id);
-          document.getElementById("number_votes_" + String(id)).innerHTML = "<p>Number of votes: " + data.score + "</p>";
+          document.getElementById(String(id)).innerHTML = "<p>Number of votes: " + data.score + "</p>";
 
         });
       }
