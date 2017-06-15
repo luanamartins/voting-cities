@@ -1,0 +1,23 @@
+[
+  {
+    "path": "/templates/nature1.jpg",
+    "score": 0,
+    "id": 1,
+    "latitude": "41.850",
+    "longitude": "-87.650"
+  },
+  {
+    "path": "/templates/nature2.jpg",
+    "score": 0,
+    "id": 2,
+    "latitude": "39.7684",
+    "longitude": "-86.1581"
+  },
+  {
+    "path": "/templates/nature3.jpg",
+    "score": 0,
+    "id": 3,
+    "latitude": "42.3314",
+    "longitude": "-83.0458"
+  }
+]

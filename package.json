@@ -1,0 +1,16 @@
+{
+  "name": "application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "luanamartins",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongodb": "^2.2.28",
+    "socket.io": "^2.0.3"
+  }
+}

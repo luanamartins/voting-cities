@@ -1,0 +1,94 @@
+<!-- <script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('/');
+    // socket.emit('event', { message: 'Hey, I have an important message!' });
+    // socket.emit('vote', { id: '1' });
+    socket.emit('all-candidates');
+    socket.emit('info-candidate', { id : 1 });
+    socket.emit('vote-up', { id : 2 });
+    socket.emit('vote-down', { id : 1 });
+</script> -->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('/');
+      function initMap() {
+
+        var chicago = new google.maps.LatLng(41.850, -87.650);
+        var indianapolis = new google.maps.LatLng(39.7684, -86.1581);
+        var detroit = new google.maps.LatLng(42.3314, -83.0458);
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: chicago
+        });
+
+        addMarker(map, chicago, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg', 'Chicago', 1);
+        addMarker(map, indianapolis, 'https://static.pexels.com/photos/20974/pexels-photo.jpg', 'Indianapolis', 2);
+        addMarker(map, detroit, 'http://ca.france.fr/sites/default/files/imagecache/ATF_Image_bandeau_v2/la_france_cote_nature_6.jpg', 'Detroit', 3);
+
+      }
+
+      function addMarker(map, place, imagePath, cityName, id){
+        var marker = new google.maps.Marker({
+          position: place,
+          map: map
+        });
+
+        var coordInfoWindow = new google.maps.InfoWindow();
+
+        coordInfoWindow.setContent("<img src=" + imagePath + " alt='" + cityName + "' height='200' width='400' >"
+        + "<p><button onclick='voteDown(" + id + ")'>Vote down</button>"
+        + "<button onclick='voteUp(" + id + ")'>Vote up</button></p>"
+        + "<p id='number_votes_" + id + "'>Number of votes: </p>");
+        coordInfoWindow.setPosition(place);
+
+        google.maps.event.addListener(marker, 'click', function() {
+          coordInfoWindow.open(map);
+        });
+
+        marker.info = coordInfoWindow;
+      }
+
+      function voteUp(id){
+        console.log('vote up', id);
+
+        socket.emit('vote-up', { id });
+
+        socket.on('vote-up-finished', function(data){
+          console.log(data);
+          document.getElementById("number_votes_" + id).innerHTML = "Number of votes: " + data.score;
+        });
+      }
+
+      function voteDown(id){
+        console.log('vote down', id);
+
+        socket.emit('vote-down', { id });
+
+        socket.on('vote-down-finished', function(data){
+          console.log(data);
+          document.getElementById("number_votes_" + id).innerHTML = "Number of votes: " + data.score;
+        });
+      }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgZzHXWHOEzMF5_cflP6ut9UbErWJjj_0&callback=initMap">
+    </script>
+  </body>
+</html>
