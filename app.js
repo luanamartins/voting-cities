@@ -58,4 +58,4 @@ io.on('connection', function(socket) {
 
 db.setupDatabase();
 server.listen(8080);
-console.log('server started');
+console.log('Server started on ', 8080);
